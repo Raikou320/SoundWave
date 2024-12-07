@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundWave</title>
+</head>
+<body>
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <select id="language-options">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+    </select>
+    <script>
+        const languageOptions = document.getElementById('language-options')
+        languageOptions.addEventListener("change", () => {
+            chooseLanguage(languageOptions.value)
+        })
+        async function chooseLanguage(lang) {
+            localStorage.setItem('language', JSON.stringify(lang))
+            const response = await fetch(`../languages/${lang}/home.json`)
+            const data = await response.json()
+           
+        }
+        async function postData(url, data, mode = "obj") {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+        let post = await response.json();
+        if (mode === 'obj') {
+            post = { ...post, ...data };
+        } else if (mode === 'arr' && Array.isArray(post) && Array.isArray(data)) {
+            post = [...post, ...data];
+        } else {
+            console.warn("Mode invalide ou types incompatibles");
+        }
+        console.log(post);
+    } catch (error) {
+        console.error("Erreur lors de la requête :", error.message);
+    }
+}
+    </script>
+</body>
+</html>
